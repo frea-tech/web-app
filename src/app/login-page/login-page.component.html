@@ -1,0 +1,52 @@
+<div *ngIf="auth.user$ | async; then authenticated else guest">
+    <!-- template will replace this div -->
+</div>
+<!-- User NOT logged in -->
+
+<ng-template #guest>
+    <mat-card class="loginCard">
+            <mat-card-content>
+                    <img mat-card-image src="../../assets/64956705_2289541131298275_8079601058856304640_n.png">
+                    <mat-form-field>
+                            <input matInput placeholder="Email" [formControl]="email" required #email>
+                            <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+                          </mat-form-field>
+                          <br>
+                          <mat-form-field>
+                                <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" #password>
+                                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button>
+                              </mat-form-field>   
+<mat-card-actions>
+        <button mat-raised-button color="black"  (click)="auth.emailSignin(email.value,password.value)">Login</button>
+      </mat-card-actions>
+      <mat-card-actions>
+            <button mat-raised-button color="warn"  (click)="auth.googleSignin()">Connect Google</button>
+          </mat-card-actions> 
+          <mat-card-actions><button mat-button color="black"  (click)="auth.emailSignup(email.value,password.value)">Signup</button>
+            <button mat-button color="black"  (click)="auth.forgotPassword(email.value)">Forgot password</button></mat-card-actions>
+      <!-- <mat-card-actions>
+            <button mat-raised-button color="primary"  (click)="auth.facebookSignin()">Connect facebook</button>
+          </mat-card-actions> -->
+    </mat-card-content>
+</mat-card>
+</ng-template>
+
+
+<!-- User logged in -->
+<ng-template #authenticated>
+<mat-card class="loginCard">
+        <mat-card-content>
+<div *ngIf="auth.user$ | async as user">
+    <h3>Welcome, {{ user.displayName }}</h3>
+    <img mat-card-image [src]="user.photoURL">
+    <p>UID: {{ user.uid }}</p>
+<mat-card-actions>
+    <button mat-button (click)="auth.signOut()">Logout</button>
+</mat-card-actions>
+</div>
+</mat-card-content>
+</mat-card>
+</ng-template>
+
