@@ -4,28 +4,28 @@
 <!-- User NOT logged in -->
 
 <ng-template #guest>
-    <mat-card class="loginCard">
+    <mat-card>
             <mat-card-content>
                     <img mat-card-image src="../../assets/64956705_2289541131298275_8079601058856304640_n.png">
-                    <mat-form-field>
+                    <mat-form-field  >
                             <input matInput placeholder="Email" [formControl]="email" required #email>
                             <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
                           </mat-form-field>
                           <br>
-                          <mat-form-field>
+                          <mat-form-field >
                                 <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" #password>
                                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                                 </button>
                               </mat-form-field>   
-<mat-card-actions>
-        <button mat-raised-button color="black"  (click)="auth.emailSignin(email.value,password.value)">Login</button>
+<mat-card-actions >
+        <button mat-raised-button color="black"  (click)="auth.emailSignin(email.value,password.value)">{{password.value}}Login</button>
       </mat-card-actions>
-      <mat-card-actions>
-            <button mat-raised-button color="warn"  (click)="auth.googleSignin()">Connect Google</button>
+      <mat-card-actions >
+            <button mat-raised-button color="warn"  (click)="auth.googleSignin()">Login with Google</button>
           </mat-card-actions> 
-          <mat-card-actions><button mat-button color="black"  (click)="auth.emailSignup(email.value,password.value)">Signup</button>
-            <button mat-button color="black"  (click)="auth.forgotPassword(email.value)">Forgot password</button></mat-card-actions>
+          <mat-card-actions ><button mat-button color="black"  (click)="auth.emailSignup(email.value,password.value)">Signup</button>
+            <button mat-button color="black"  (click)="auth.forgotPassword(email.value)">Forgot password?</button></mat-card-actions>
       <!-- <mat-card-actions>
             <button mat-raised-button color="primary"  (click)="auth.facebookSignin()">Connect facebook</button>
           </mat-card-actions> -->

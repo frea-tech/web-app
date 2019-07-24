@@ -42,30 +42,43 @@ export class AuthService {
       const credential = await this.afAuth.auth.signInWithPopup(provider);
       return this.updateUserData(credential.user);
     }
-    async emailSignin(email: string, password: string){
+    async emailSignin(email: string, password: string) {
       const provider = new auth.EmailAuthProvider();
       const credential = await this.afAuth.auth.signInWithEmailAndPassword(email, password).then(value => {
-        console.log('Nice, it worked!');
+        console.log('a ok');
       })
       .catch(err => {
         alert(err.message);
         console.log('Something went wrong:', err.message);
       });
     }
-    emailSignup(email: string, password: string) {
-      this.afAuth
-        .auth
-        .createUserWithEmailAndPassword(email, password)
-        .then(value => {
-          alert('Success!');
-          console.log('Success!', value);
-        })
-        .catch(err => {
-          console.log('Something went wrong:', err.message);
-        });
+    async emailSignup(email: string, password: string) {
+      return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
+      .then(user => {
+        console.log(user);
+        return this.setUserDoc(user.user); // create initial user document
+      })
+      .catch(error => this.handleError(error) );
     }
-    forgotPassword(email: string){
-      this.afAuth.auth.sendPasswordResetEmail(email).then(() => console.log("email sent"))
+    private handleError(error: any): Promise<any> {
+      console.error('An error occurred', error); // for demo purposes only
+      return Promise.reject(error.message || error);
+   }
+   private setUserDoc(user) {
+
+    const userRef = this.afs.doc(`users/${user.uid}`);
+    const name = user.email.split('@', 2)[0];
+    const data: User = {
+      uid: user.uid,
+      email: user.email || null,
+      displayName: name
+    };
+
+    return userRef.set(data);
+
+  }
+    forgotPassword(email: string) {
+      this.afAuth.auth.sendPasswordResetEmail(email).then(() => console.log('email sent'))
       .catch((error) => console.log(error));
     }
     private updateUserData(user) {

@@ -13,16 +13,18 @@ import { environment } from '../environments/environment';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MaterialModule } from './services/material.service';
 import { RouterModule } from '@angular/router';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot([
-      {path: '', component: LoginPageComponent },
+      {path: '', component: LandingPageComponent },
     ]),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
