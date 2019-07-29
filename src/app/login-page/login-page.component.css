@@ -1,7 +1,7 @@
 mat-card {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5%;
+  margin-top: 10%;
   width: 18em;
   justify-content: center;
   align-content: center;
@@ -15,13 +15,4 @@ mat-card {
     width: 100%;
     min-width: 300px;
   }
-
-
-  mat-card-title,
-  mat-card-content {
-    /* display: flex; */
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
+ 

@@ -35,12 +35,13 @@ export class AuthService {
      async googleSignin() {
       const provider = new auth.GoogleAuthProvider();
       const credential = await this.afAuth.auth.signInWithPopup(provider);
-      return this.updateUserData(credential.user);
+      // console.log(credential.user);
+      return this.updateUserData(credential);
     }
     async facebookSignin() {
       const provider = new auth.FacebookAuthProvider();
       const credential = await this.afAuth.auth.signInWithPopup(provider);
-      return this.updateUserData(credential.user);
+      return this.updateUserData(credential);
     }
     async emailSignin(email: string, password: string) {
       const provider = new auth.EmailAuthProvider();
@@ -52,22 +53,34 @@ export class AuthService {
         console.log('Something went wrong:', err.message);
       });
     }
-    async emailSignup(email: string, password: string) {
+    async emailSignup(name: string, email: string, password: string) {
       return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
-      .then(user => {
-        console.log(user);
-        return this.setUserDoc(user.user); // create initial user document
-      })
-      .catch(error => this.handleError(error) );
+      .then((user) => {
+        this.afAuth.user.subscribe( x => {
+          if (x) {
+            x.sendEmailVerification()
+            .then(() => {
+              return this.setUserDoc(user.user, name);
+              console.log('Email verification sent');
+            })
+            .catch(err => {
+              console.log('Error: ', err);
+            });
+          }
+        }); })
+        .catch(err => {
+          console.log('Error: ', err);
+        });
     }
+
     private handleError(error: any): Promise<any> {
-      console.error('An error occurred', error); // for demo purposes only
+      console.error('An error occurred', error);
       return Promise.reject(error.message || error);
    }
-   private setUserDoc(user) {
+   private setUserDoc(user, name) {
 
     const userRef = this.afs.doc(`users/${user.uid}`);
-    const name = user.email.split('@', 2)[0];
+    // const name = user.email.split('@', 2)[0];
     const data: User = {
       uid: user.uid,
       email: user.email || null,
@@ -83,12 +96,14 @@ export class AuthService {
     }
     private updateUserData(user) {
       // Sets user data to firestore on login
-      const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
+      const userId = user.user.uid;
+      console.log(user.user.uid + user.user.email + user.user.displayName + user.user.photoURL);
+      const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${userId}`);
       const data = {
-        uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL
+        uid: user.user.uid,
+        email: user.user.email,
+        displayName: user.user.displayName,
+        photoURL: user.user.photoURL
       };
       return userRef.set(data, { merge: true });
     }

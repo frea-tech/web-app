@@ -1,40 +1,110 @@
-<div *ngIf="auth.user$ | async; then authenticated else guest">
-    <!-- template will replace this div -->
-</div>
+<!-- <div *ngIf="auth.user$ | async; then authenticated else guest">
+  template will replace this div 
+</div> -->
 <!-- User NOT logged in -->
 
-<ng-template #guest>
-    <mat-card>
-            <mat-card-content>
-                    <img mat-card-image src="../../assets/64956705_2289541131298275_8079601058856304640_n.png">
+<!-- <ng-template #guest> -->
+    
+    <mat-card [ngSwitch]="loginScreen">
+        <!-- <div *ngIf="SignUp; then signup else login"></div> -->
+            <!-- <ng-template #login> -->
+                <mat-card-content *ngSwitchCase="'login'">
+                    <!-- <img mat-card-image src="../../assets/64956705_2289541131298275_8079601058856304640_n.png"> -->
+                    <mat-card-actions style="display: flex; justify-content:flex-end;margin-right: -20px;">
+                        <button mat-icon-button style="text-align:center;font-size: 25px;border-radius: 50%;border: 1px solid gray;">x</button>
+                      </mat-card-actions> 
+                    <mat-card-actions >
+                      <button mat-raised-button color="warn"  (click)="auth.googleSignin()">Login with Google</button>
+                    </mat-card-actions> 
+                    <hr>
+                    <p style="text-align:center;margin-top: -17px;"><span style="background-color: white;border-left: 5px solid white;border-right: 5px solid white;"> or </span></p>
                     <mat-form-field  >
-                            <input matInput placeholder="Email" [formControl]="email" required #email>
+                            <input matInput placeholder="Email" [formControl]="email" required >
                             <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
                           </mat-form-field>
                           <br>
                           <mat-form-field >
-                                <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" #password>
+                                <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" [formControl]="password">
                                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                                 </button>
+                                <mat-error *ngIf="password.invalid">password is invalid</mat-error>
                               </mat-form-field>   
 <mat-card-actions >
-        <button mat-raised-button color="black"  (click)="auth.emailSignin(email.value,password.value)">{{password.value}}Login</button>
+        <button mat-raised-button style="background-color:cadetblue;color:white;" 
+        ng-disabled="!password.invalid && !email.invalid"
+         (click)="auth.emailSignin(email.value,password.value)">Log in</button>
       </mat-card-actions>
-      <mat-card-actions >
-            <button mat-raised-button color="warn"  (click)="auth.googleSignin()">Login with Google</button>
-          </mat-card-actions> 
-          <mat-card-actions ><button mat-button color="black"  (click)="auth.emailSignup(email.value,password.value)">Signup</button>
-            <button mat-button color="black"  (click)="auth.forgotPassword(email.value)">Forgot password?</button></mat-card-actions>
+          <mat-card-actions  style="display: flex; justify-content: center;margin: -10px;margin-top: -25px;"><button mat-flat-button class="flatLink"  (click)="loginScreen= 'resetPassword'">Forgot password?</button></mat-card-actions>
+          <hr>
+          <mat-card-actions>
+            <span><b>New to Frea?</b></span>
+            <button mat-flat-button class="flatLink"  (click)="loginScreen = 'signup'">Sign up</button></mat-card-actions>
       <!-- <mat-card-actions>
             <button mat-raised-button color="primary"  (click)="auth.facebookSignin()">Connect facebook</button>
           </mat-card-actions> -->
     </mat-card-content>
+            <!-- </ng-template> -->
+    <!-- <ng-template #signup> -->
+        <mat-card-content *ngSwitchCase="'signup'">
+            <!-- <img mat-card-image src="../../assets/64956705_2289541131298275_8079601058856304640_n.png"> -->
+            <mat-card-actions style="display: flex; justify-content:flex-end;margin-right: -20px;">
+                <button mat-icon-button style="text-align:center;font-size: 25px;border-radius: 50%;border: 1px solid gray;">x</button>
+              </mat-card-actions>
+              <!-- <mat-card-actions>
+    <button mat-raised-button color="primary"  (click)="auth.facebookSignin()">Connect facebook</button>
+  </mat-card-actions> --> 
+            <mat-card-actions >
+              <button mat-raised-button color="warn"  (click)="auth.googleSignin()">Sign up with Google</button>
+            </mat-card-actions> 
+            <hr>
+            <p style="text-align:center;margin-top: -17px;"><span style="background-color: white;border-left: 5px solid white;border-right: 5px solid white;"> or </span></p>
+            <mat-form-field  >
+                <input matInput placeholder="Name" [formControl]="name" required >
+                <mat-error *ngIf="name.invalid">You must enter your name.</mat-error>
+              </mat-form-field>
+              <br>
+            <mat-form-field  >
+                    <input matInput placeholder="Email" [formControl]="email" required >
+                    <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+                  </mat-form-field>
+                  <br>
+                  <mat-form-field >
+                        <input matInput placeholder="Password" [formControl]="password" [type]="hide ? 'password' : 'text'" >
+                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="password.invalid">password is invalid</mat-error>
+                      </mat-form-field>   
+<mat-card-actions >
+<button mat-raised-button style="background-color:cadetblue;color:white;" 
+ng-disabled="!password.invalid && !email.invalid && !name.invalid"
+ (click)="auth.emailSignup(name.value,email.value,password.value)">Sign up</button>
+</mat-card-actions>
+  <hr>
+  <mat-card-actions>
+    <span><b>Already a user?</b></span>
+    <button mat-flat-button class="flatLink" (click)="loginScreen = 'login'">Log in</button></mat-card-actions>
+
+</mat-card-content>
+    <!-- </ng-template> -->
+<mat-card-content *ngSwitchCase="'resetPassword'">
+  <h1>Reset Password</h1>
+  <p>Enter the email associated with your acount,and we'll email you a link to reset your password.</p>
+  <mat-form-field  >
+      <input matInput placeholder="Email" [formControl]="email" required >
+      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+    </mat-form-field>
+    <mat-card-actions >
+      <button mat-flat-button style="color:chartreuse" (click)="loginScreen = 'login'"><b>< back to login</b></button>
+        <button mat-raised-button style="background-color:chocolate;color:white;" (click)="auth.forgotPassword(email.value);loginScreen='login';">Get reset Link</button>
+        </mat-card-actions>
+</mat-card-content>         
 </mat-card>
-</ng-template>
+<!-- </ng-template> -->
 
 
-<!-- User logged in -->
+<!-- User logged in
 <ng-template #authenticated>
 <mat-card class="loginCard">
         <mat-card-content>
@@ -49,4 +119,4 @@
 </mat-card-content>
 </mat-card>
 </ng-template>
-
+ -->

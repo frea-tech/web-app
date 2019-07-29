@@ -12,20 +12,22 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MaterialModule } from './services/material.service';
-import { RouterModule } from '@angular/router';
+// import { RouterModule } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { ToolBarComponent } from './tool-bar/tool-bar.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    ToolBarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule.forRoot([
-      {path: '', component: LandingPageComponent },
-    ]),
+    // RouterModule.forRoot([
+    //   {path: '', component: LoginPageComponent },
+    // ]),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
