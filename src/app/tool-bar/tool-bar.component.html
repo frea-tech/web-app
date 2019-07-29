@@ -1,0 +1,21 @@
+<mat-toolbar>
+
+    <mat-toolbar-row>
+     <img style="height: 80%;" src="../../assets/64956705_2289541131298275_8079601058856304640_n.png" alt="f">
+      <span style="margin-right:2em; "><b>Frea</b></span>
+      <button mat-button>Home</button>
+      <button mat-button>Real estate</button>
+      <button mat-button>Info</button>
+      <span class="example-spacer"></span>
+      <hr>  
+      <mat-form-field appearance="outline" style="margin-top:1%;width: 25%;font-size: 15px;">
+            <mat-label>Search</mat-label>
+            <input matInput placeholder="What are you looking for?">
+            <mat-icon matSuffix>search</mat-icon>
+            <!-- <mat-hint>Try villa</mat-hint> -->
+          </mat-form-field>
+  <button mat-button [routerLink]="['/login']" routerLinkActive="login" >Login</button>
+  <button mat-button style="background-color:cadetblue;color: white;">SignUp</button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  
